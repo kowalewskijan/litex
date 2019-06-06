@@ -105,6 +105,7 @@ class XilinxVivadoToolchain:
         self.bitstream_commands = []
         self.additional_commands = []
         self.pre_synthesis_commands = []
+        self.post_synthesis_commands = []
         self.with_phys_opt = False
         self.clocks = dict()
         self.false_paths = set()
@@ -153,6 +154,8 @@ class XilinxVivadoToolchain:
         tcl.append("report_timing_summary -file {}_timing_synth.rpt".format(build_name))
         tcl.append("report_utilization -hierarchical -file {}_utilization_hierarchical_synth.rpt".format(build_name))
         tcl.append("report_utilization -file {}_utilization_synth.rpt".format(build_name))
+        for post_synthesis_command in self.post_synthesis_commands:
+            tcl.append(post_synthesis_command.format(build_name=build_name))
         tcl.append("opt_design")
         tcl.append("place_design")
         if self.with_phys_opt:
